@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import Dados
+import Dados, EnviarEmail
 
 
 class Ui_Form(object):
@@ -35,12 +35,10 @@ class MyForm(QtWidgets.QWidget):
         model = QtGui.QStandardItemModel()
         for item_text in data:
             item = QtGui.QStandardItem(item_text)
-            item.setCheckable(True)  # Torna o item selecionável
-            item.setEditable(False)  # Impede a edição do nome do item
+            item.setCheckable(True)  
+            item.setEditable(False)  
             model.appendRow(item)
         self.ui.listView.setModel(model)
-
-        # Conectando o botão "Enviar" ao método de impressão
         self.ui.pushButton.clicked.connect(self.print_selected_items)
 
     def print_selected_items(self):
@@ -49,7 +47,9 @@ class MyForm(QtWidgets.QWidget):
         selected_items = [model.item(index).text() for index in selected_indexes]
         print("Itens selecionados:")
         for item in selected_items:
-            print(item)
+            dados_tabela = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(item))
+            EnviarEmail.enviar_emil(item, dados_tabela)
+        
 
 
 if __name__ == "__main__":
