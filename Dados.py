@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 
 
 file_path = 'S:/PM/ter/tef/tef3/Inter_Setor/TEF3 Controles/Bloco K Planejamento/BLOCO K - Planejamento.xlsx'
+
+
 df = pd.read_excel(file_path, sheet_name='FUP Prazos', engine='openpyxl')
 
 
@@ -40,7 +42,7 @@ def ver_prazos_vencidos(nome_fornecedor):
         excel_linha_index = index + 2  
         prazo_cell = row['Prazo']
         
-        # Verificar se a célula está vazia ou se o prazo está vencido
+
         if prazo_cell is None or prazo_cell == '' or not isinstance(prazo_cell, pd.Timestamp) or prazo_cell + timedelta(days=1) < datetime.now():
             prazos_vencidos.append(excel_linha_index)
         
@@ -67,8 +69,4 @@ def ver_informacoes_necessarias(numeros_linha):
         informacao_linha = [valor.strftime("%d/%m/%Y") if isinstance(valor, pd.Timestamp) else valor for i, valor in enumerate(linha) if i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 13]] 
         informacoes.append(informacao_linha)
     return informacoes
-
-
-
-    
 

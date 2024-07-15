@@ -59,15 +59,27 @@ class Enviar(QtWidgets.QWidget):
 
 
     def btnEnviar(self):
+        fornecedores_com_erro = []
+        for fornecedor in self.fornecedores:
+            try:
+                dados_tabela_vencido = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor))
+                dados_tabela_15 = Dados.ver_informacoes_necessarias(Dados.ver_prazos_15_dias_para_vencer(fornecedor))
+                EnviarEmail.enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15)
+            except Exception as e:
+                fornecedores_com_erro.append(fornecedor)
 
-        for item in self.fornecedores:
-            dados_tabela_vencido = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(item))
-            dados_tabela_15 = Dados.ver_informacoes_necessarias(Dados.ver_prazos_15_dias_para_vencer(item))
-            EnviarEmail.enviar_email(item, dados_tabela_vencido, dados_tabela_15)
-        self.mensagem_enviado()
+        if fornecedores_com_erro:
+            self.mensagem_enviada_com_erro(fornecedores_com_erro)
+
+        else: 
+            self.mensagem_enviada()
+
         self.primeira_tela = telaInicial.Inicial()
         self.primeira_tela.show()
         self.close()
+
+
+
 
 
     def btnCancelar(self):
@@ -76,10 +88,19 @@ class Enviar(QtWidgets.QWidget):
         self.close()
         
 
-    def mensagem_enviado(self):
+    def mensagem_enviada(self):
         msg_box = QtWidgets.QMessageBox()
         msg_box.setIcon(QtWidgets.QMessageBox.Information)
         msg_box.setText("Emails enviados com sucesso!")
+        msg_box.setWindowTitle("Confirmação")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg_box.exec_()
+
+    def mensagem_enviada_com_erro(self, fornecedores):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Warning)
+        fornecedores_str = "\n".join(fornecedores)
+        msg_box.setText("Os emails foram enviados, porém alguns fornecedores tiveram problema:\n" + fornecedores_str)
         msg_box.setWindowTitle("Confirmação")
         msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msg_box.exec_()

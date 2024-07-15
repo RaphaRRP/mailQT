@@ -24,7 +24,9 @@ def enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15):
     outlook = win32.Dispatch('outlook.application')
     email = outlook.CreateItem(0)
     email.To = f"{Dados.email_do_fornecedor(fornecedor)};lucas.martinez@br.bosch.com"
-    #email.To = "alice.moura.101@gmail.com"
+
+
+    
     email.Subject = f"[{data_atual}] {fornecedor} - Prazos"
 
 

@@ -51,7 +51,7 @@ class Inicial(QtWidgets.QWidget):
         data = Dados.buscar_fornecedores(depositos=self.depositos)
         self.model = QtGui.QStandardItemModel()
         for item_text in data:
-            item = QtGui.QStandardItem(item_text)
+            item = QtGui.QStandardItem(str(item_text))
             item.setCheckable(True)
             item.setEditable(False)
             self.model.appendRow(item)
