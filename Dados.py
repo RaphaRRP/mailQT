@@ -33,8 +33,6 @@ def email_do_fornecedor(nome_fornecedor):
     return email
 
 
-from datetime import datetime, timedelta
-
 def ver_prazos_vencidos(nome_fornecedor):
     prazos_vencidos = []
     filtro_fornecedor = df['Razão Social'] == nome_fornecedor
