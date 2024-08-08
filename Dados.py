@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
+#file_path = 'C:/Users/prr8ca/Desktop/Projetos/Email/mailQT/BLOCO K - Planejamento.xlsx'
 file_path = 'S:/PM/ter/tef/tef3/Inter_Setor/TEF3 Controles/Bloco K Planejamento/BLOCO K - Planejamento.xlsx'
 
 
@@ -30,33 +31,41 @@ def buscar_depositos():
 def email_do_fornecedor(nome_fornecedor): 
     filtro_fornecedor = df['Razão Social'] == nome_fornecedor
     email = df.loc[filtro_fornecedor, 'E-mail Fornecedor'].iloc[0] if filtro_fornecedor.any() else None
+    print(email)
     return email
 
 
-def ver_prazos_vencidos(nome_fornecedor):
+def ver_prazos_vencidos(nome_fornecedor, tipo):
     prazos_vencidos = []
+    prazos_vazios = []
+    prazos_15_dias = []
     filtro_fornecedor = df['Razão Social'] == nome_fornecedor
     for index, row in df[filtro_fornecedor].iterrows():
         excel_linha_index = index + 2  
         prazo_cell = row['Prazo']
         
+        if isinstance(prazo_cell, pd._libs.tslibs.nattype.NaTType):
+            prazos_vazios.append(excel_linha_index)
 
-        if prazo_cell is None or prazo_cell == '' or not isinstance(prazo_cell, pd.Timestamp) or prazo_cell + timedelta(days=1) < datetime.now():
+        elif prazo_cell + timedelta(days=1) < datetime.now():
             prazos_vencidos.append(excel_linha_index)
+
+        elif prazo_cell <= datetime.now() + timedelta(days=15):
+            prazos_15_dias.append(excel_linha_index)
+            
+
+    if tipo == "vencidos":
+        print("prazos vencidos: ", prazos_vencidos)
+        return prazos_vencidos
+    
+    elif tipo == "vazio":
+        print("prazos vazios: ", prazos_vazios)
+        return prazos_vazios
+    
+    elif tipo == "15":
+        print("prazos que faltam 15 dias: ", prazos_15_dias)
+        return prazos_15_dias
         
-    return prazos_vencidos
-
-
-def ver_prazos_15_dias_para_vencer(nome_fornecedor):
-    prazos_para_vencer = []
-    filtro_fornecedor = df['Razão Social'] == nome_fornecedor
-    for index, row in df[filtro_fornecedor].iterrows():
-        excel_linha_index = index + 2  
-        prazo_cell = row['Prazo']  
-        cell_content = prazo_cell
-        if cell_content is not None and datetime.now() <= cell_content <= datetime.now() + timedelta(days=15):
-            prazos_para_vencer.append(excel_linha_index)
-    return prazos_para_vencer
 
 
 def ver_informacoes_necessarias(numeros_linha):

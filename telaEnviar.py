@@ -62,10 +62,12 @@ class Enviar(QtWidgets.QWidget):
         fornecedores_com_erro = []
         for fornecedor in self.fornecedores:
             try:
-                dados_tabela_vencido = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor))
-                dados_tabela_15 = Dados.ver_informacoes_necessarias(Dados.ver_prazos_15_dias_para_vencer(fornecedor))
-                EnviarEmail.enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15)
+                dados_tabela_vencido = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor, "vencidos"))
+                dados_tabela_15 = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor, "15"))
+                dados_tabela_vazio = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor, "vazio"))
+                EnviarEmail.enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15, dados_tabela_vazio)
             except Exception as e:
+                print(e)
                 fornecedores_com_erro.append(fornecedor)
 
         if fornecedores_com_erro:

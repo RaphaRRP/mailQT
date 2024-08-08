@@ -97,7 +97,13 @@ class Inicial(QtWidgets.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    form = Inicial()
-    form.show()
-    sys.exit(app.exec_())
+    try:
+        app = QtWidgets.QApplication(sys.argv)
+        form = Inicial()
+        form.show()
+        sys.exit(app.exec_())
+    except:
+        app = QtWidgets.QApplication(sys.argv)
+        form = telaAjuda.Ajuda()
+        form.show()
+        sys.exit(app.exec_())
