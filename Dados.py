@@ -22,10 +22,10 @@ def buscar_fornecedores(depositos=None):
 
 
 def buscar_depositos():
-    deposito_unicos = df['Depósito'].unique()
+    df['Depósito'] = df['Depósito'].astype(str).str.strip()
+    deposito_unicos = df['Depósito'].dropna().unique()
     deposito_lista = deposito_unicos.tolist()
-    deposito_strings = [dep for dep in deposito_lista if isinstance(dep, str)]
-    return deposito_strings
+    return deposito_lista
 
 
 def email_do_fornecedor(nome_fornecedor): 
@@ -43,8 +43,8 @@ def ver_prazos_vencidos(nome_fornecedor, tipo):
     for index, row in df[filtro_fornecedor].iterrows():
         excel_linha_index = index + 2  
         prazo_cell = row['Prazo']
-        
-        if isinstance(prazo_cell, pd._libs.tslibs.nattype.NaTType):
+
+        if isinstance(prazo_cell, pd._libs.tslibs.nattype.NaTType) or isinstance(prazo_cell, float):
             prazos_vazios.append(excel_linha_index)
 
         elif prazo_cell + timedelta(days=1) < datetime.now():
@@ -73,7 +73,8 @@ def ver_informacoes_necessarias(numeros_linha):
     for numero_linha in numeros_linha:
         linha = df.iloc[numero_linha - 2]  
 
-        informacao_linha = [valor.strftime("%d/%m/%Y") if isinstance(valor, pd.Timestamp) else valor for i, valor in enumerate(linha) if i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 13]] 
+        informacao_linha = [valor.strftime("%d/%m/%Y") if isinstance(valor, pd.Timestamp) else valor for i, valor in enumerate(linha) if i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 14]]
         informacoes.append(informacao_linha)
+    print(informacoes)
     return informacoes
 

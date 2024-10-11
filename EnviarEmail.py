@@ -8,7 +8,7 @@ def enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15, dados_tabela
     data_atual = datetime.now().strftime("%d/%m/%Y")
     outlook = win32.Dispatch('outlook.application')
     email = outlook.CreateItem(0)
-    email.To = f"{Dados.email_do_fornecedor(fornecedor)};lucas.martinez@br.bosch.com"
+    email.To = f"{Dados.email_do_fornecedor(fornecedor)};lucas.martinez@br.bosch.com;fixed-term.isabella.manzan@br.bosch.com;bruna.silva@br.bosch.com"
     #email.To = "alice.moura.101@gmail.com"
 
 
@@ -90,8 +90,6 @@ def enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15, dados_tabela
         </tr>
         {linhas_tabela_15}
     </table>
-
-    <p style="font-family: Arial, sans-serif; font-size: 10pt;">Obrigado!</p> 
     """
 
     email.Send()

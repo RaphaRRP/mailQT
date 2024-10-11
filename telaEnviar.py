@@ -66,6 +66,7 @@ class Enviar(QtWidgets.QWidget):
                 dados_tabela_15 = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor, "15"))
                 dados_tabela_vazio = Dados.ver_informacoes_necessarias(Dados.ver_prazos_vencidos(fornecedor, "vazio"))
                 EnviarEmail.enviar_email(fornecedor, dados_tabela_vencido, dados_tabela_15, dados_tabela_vazio)
+
             except Exception as e:
                 print(e)
                 fornecedores_com_erro.append(fornecedor)
@@ -79,9 +80,6 @@ class Enviar(QtWidgets.QWidget):
         self.primeira_tela = telaInicial.Inicial()
         self.primeira_tela.show()
         self.close()
-
-
-
 
 
     def btnCancelar(self):
